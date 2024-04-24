@@ -53,40 +53,57 @@ struct ContentView: View {
                 }
 
                 Section {
-                    ForEach(SettingOption.allCases.prefix(6), id: \.self) { option in
-                        SettingCell(option: option)
+                    ForEach(Setting.allCases.prefix(6), id: \.self) { setting in
+                        SettingCell(setting: setting)
                     }
                 }
 
                 Section {
-                    ForEach(SettingOption.allCases.suffix(4), id: \.self) { option in
-                        SettingCell(option: option)
+                    ForEach(Setting.allCases.suffix(4), id: \.self) { setting in
+                        SettingCell(setting: setting)
                     }
                 }
             }
-            .padding([.top], -10)
-            .padding(.horizontal, -4)
             .navigationTitle("Settings")
+            .padding(.horizontal, -4)
         }
         .searchable(text: $searchText)
     }
 }
 
+class SettingCellViewModel: ObservableObject {
+    @Published var isOn: Bool
+
+    init(setting: Setting) {
+        switch setting {
+            case .airplaneMode, .vpn:
+                isOn = false // Set the initial state for toggles
+            default:
+                isOn = false // You can set a default state or handle it differently
+        }
+    }
+}
+
 struct SettingCell: View {
-    let option: SettingOption
-    @State private var isOn: Bool = false // State to manage the toggle switch
+    let setting: Setting
+    @ObservedObject private var viewModel: SettingCellViewModel
+
+    init(setting: Setting) {
+        self.setting = setting
+        self.viewModel = SettingCellViewModel(setting: setting)
+    }
 
     var body: some View {
         // Check if the option should display a toggle
-        if option == .airplaneMode || option == .vpn {
-            Toggle(isOn: $isOn) {
+        if setting == .airplaneMode || setting == .vpn {
+            Toggle(isOn: $viewModel.isOn) {
                 HStack(spacing: 15) {
                     settingIcon
                 }
             }
         } else {
             // Use a NavigationLink for other options
-            NavigationLink(destination: Text("Destination for \(option.text)")) {
+            NavigationLink(destination: Text("Destination for \(setting.text)")) {
                 HStack(spacing: 15) {
                     settingIcon
                 }
@@ -97,21 +114,21 @@ struct SettingCell: View {
     @ViewBuilder
     private var settingIcon: some View {
         RoundedRectangle(cornerRadius: 8)
-            .fill(option.color)
+            .fill(setting.color)
             .frame(width: 30, height: 30)
             .overlay(
-                Image(systemName: option.iconName)
+                Image(systemName: setting.iconName)
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(.white)
                     .frame(width: 20, height: 20)
             )
 
-        Text(option.text)
+        Text(setting.text)
 
         Spacer()
 
-        if let detailText = option.detailText {
+        if let detailText = setting.detailText {
             Text(detailText)
                 .foregroundStyle(.primary)
                 .fontWeight(.light)
@@ -119,7 +136,7 @@ struct SettingCell: View {
     }
 }
 
-enum SettingOption: CaseIterable {
+enum Setting: CaseIterable {
     case airplaneMode, wifi, bluetooth, cellular, personalHotspot, vpn, notifications, soundsHaptics, focus, screenTime
 
     var iconName: String {

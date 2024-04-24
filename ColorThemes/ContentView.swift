@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var searchText = ""
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                Section {
+                Section(header: Spacer().frame(height: 0)) {
                     NavigationLink(destination: Text("Destination for Pat Smith")) {
                         HStack {
                             Image(systemName: "person.crop.circle.fill")
@@ -22,13 +24,13 @@ struct ContentView: View {
                                 Text("Pat Smith")
                                     .font(.title2)
                                 Text("Apple ID, iCloud, Media & Purchases")
-                                    .font(.footnote)
+                                    .font(.subheadline)
                                     .foregroundStyle(.primary)
                             }
                         }
                     }
 
-                    NavigationLink(destination: Text("Destination for Family")){
+                    NavigationLink(destination: Text("Destination for Family")) {
                         HStack {
                             HStack(spacing: -10) {
                                 Image(systemName: "person.crop.circle.fill")
@@ -62,9 +64,11 @@ struct ContentView: View {
                     }
                 }
             }
-            .listStyle(InsetGroupedListStyle())
+            .padding([.top], -10)
+            .padding(.horizontal, -4)
             .navigationTitle("Settings")
         }
+        .searchable(text: $searchText)
     }
 }
 

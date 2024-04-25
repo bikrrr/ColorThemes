@@ -13,53 +13,16 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section(header: Spacer().frame(height: 0)) {
-                    NavigationLink(destination: Text("Destination for Pat Smith")) {
-                        HStack {
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .foregroundStyle(.secondary)
-                                .frame(width: 60, height: 60)
-                            VStack(alignment: .leading) {
-                                Text("Pat Smith")
-                                    .font(.title2)
-                                Text("Apple ID, iCloud, Media & Purchases")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                    }
-
-                    NavigationLink(destination: Text("Destination for Family")) {
-                        HStack {
-                            HStack(spacing: -10) {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(.gray)
-                                    .frame(width: 35, height: 30)
-                                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .foregroundStyle(.gray)
-                                    .frame(width: 35, height: 30)
-                            }
-                            VStack(alignment: .leading) {
-                                Text("Family")
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                    }
-                }
+                ProfileView()
 
                 Section {
-                    ForEach(Setting.allCases.prefix(6), id: \.self) { setting in
+                    ForEach(Setting.allSettings.prefix(6), id: \.self) { setting in
                         SettingCell(setting: setting)
                     }
                 }
 
                 Section {
-                    ForEach(Setting.allCases.suffix(4), id: \.self) { setting in
+                    ForEach(Setting.allSettings.suffix(4), id: \.self) { setting in
                         SettingCell(setting: setting)
                     }
                 }
@@ -71,38 +34,61 @@ struct ContentView: View {
     }
 }
 
-class SettingCellViewModel: ObservableObject {
-    @Published var isOn: Bool
+struct ProfileView: View {
+    var body: some View {
+        Section(header: Spacer().frame(height: 0)) {
+            NavigationLink(destination: Text("Destination for Pat Smith")) {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .foregroundStyle(.secondary)
+                        .frame(width: 60, height: 60)
+                    VStack(alignment: .leading) {
+                        Text("Pat Smith")
+                            .font(.title2)
+                        Text("Apple ID, iCloud, Media & Purchases")
+                            .font(.subheadline)
+                            .foregroundStyle(.primary)
+                    }
+                }
+            }
 
-    init(setting: Setting) {
-        switch setting {
-            case .airplaneMode, .vpn:
-                isOn = false // Set the initial state for toggles
-            default:
-                isOn = false // You can set a default state or handle it differently
+            NavigationLink(destination: Text("Destination for Family")) {
+                HStack {
+                    HStack(spacing: -10) {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(.gray)
+                            .frame(width: 35, height: 30)
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(.gray)
+                            .frame(width: 35, height: 30)
+                    }
+                    VStack(alignment: .leading) {
+                        Text("Family")
+                            .foregroundStyle(.primary)
+                    }
+                }
+            }
         }
     }
 }
 
 struct SettingCell: View {
     let setting: Setting
-    @ObservedObject private var viewModel: SettingCellViewModel
-
-    init(setting: Setting) {
-        self.setting = setting
-        self.viewModel = SettingCellViewModel(setting: setting)
-    }
+    @State private var isOn: Bool = false
 
     var body: some View {
-        // Check if the option should display a toggle
-        if setting == .airplaneMode || setting == .vpn {
-            Toggle(isOn: $viewModel.isOn) {
+        if setting.isToggle {
+            Toggle(isOn: $isOn) {
                 HStack(spacing: 15) {
                     settingIcon
                 }
             }
         } else {
-            // Use a NavigationLink for other options
             NavigationLink(destination: Text("Destination for \(setting.text)")) {
                 HStack(spacing: 15) {
                     settingIcon
@@ -136,59 +122,120 @@ struct SettingCell: View {
     }
 }
 
-enum Setting: CaseIterable {
-    case airplaneMode, wifi, bluetooth, cellular, personalHotspot, vpn, notifications, soundsHaptics, focus, screenTime
+struct Setting: Identifiable, Equatable, Hashable {
+    let id = UUID()
+    let iconName: String
+    let text: String
+    let color: Color
+    let detailText: String?
+    let isToggle: Bool
 
-    var iconName: String {
-        switch self {
-            case .airplaneMode: return "airplane"
-            case .wifi: return "wifi"
-            case .bluetooth: return "dot.radiowaves.right"
-            case .cellular: return "antenna.radiowaves.left.and.right"
-            case .personalHotspot: return "personalhotspot"
-            case .vpn: return "network"
-            case .notifications: return "bell.badge.fill"
-            case .soundsHaptics: return "speaker.wave.3.fill"
-            case .focus: return "moon.fill"
-            case .screenTime: return "hourglass"
-        }
+    init(iconName: String, text: String, color: Color, detailText: String? = nil, isToggle: Bool = false) {
+        self.iconName = iconName
+        self.text = text
+        self.color = color
+        self.detailText = detailText
+        self.isToggle = isToggle
     }
 
-    var text: String {
-        switch self {
-            case .airplaneMode: return "Airplane Mode"
-            case .wifi: return "Wi-Fi"
-            case .bluetooth: return "Bluetooth"
-            case .cellular: return "Cellular"
-            case .personalHotspot: return "Personal Hotspot"
-            case .vpn: return "VPN"
-            case .notifications: return "Notifications"
-            case .soundsHaptics: return "Sounds & Haptics"
-            case .focus: return "Focus"
-            case .screenTime: return "Screen Time"
-        }
+    static func == (lhs: Setting, rhs: Setting) -> Bool {
+        return lhs.id == rhs.id
     }
+}
 
-    var color: Color {
-        switch self {
-            case .airplaneMode: return .orange
-            case .wifi: return .blue
-            case .bluetooth: return .blue
-            case .cellular, .personalHotspot: return .green
-            case .vpn: return .blue
-            case .notifications, .soundsHaptics: return .red
-            case .focus, .screenTime: return .indigo
-        }
-    }
+extension Setting {
+    static let airplaneMode = Setting(
+        iconName: "airplane",
+        text: "Airplane Mode",
+        color: .orange,
+        detailText: nil,
+        isToggle: true
+    )
 
-    var detailText: String? {
-        switch self {
-            case .wifi: return "FBISurveillanceVan"
-            case .bluetooth: return "On"
-            case .personalHotspot: return "Off"
-            default: return nil
-        }
-    }
+    static let wifi = Setting(
+        iconName: "wifi",
+        text: "Wi-Fi",
+        color: .blue,
+        detailText: "FBISurveillanceVan",
+        isToggle: false
+    )
+
+    static let bluetooth = Setting(
+        iconName: "dot.radiowaves.right",
+        text: "Bluetooth",
+        color: .blue,
+        detailText: "On",
+        isToggle: false
+    )
+
+    static let cellular = Setting(
+        iconName: "antenna.radiowaves.left.and.right",
+        text: "Cellular",
+        color: .green,
+        detailText: nil,
+        isToggle: false
+    )
+
+    static let personalHotspot = Setting(
+        iconName: "personalhotspot",
+        text: "Personal Hotspot",
+        color: .green,
+        detailText: "Off",
+        isToggle: false
+    )
+
+    static let vpn = Setting(
+        iconName: "network",
+        text: "VPN",
+        color: .blue,
+        detailText: nil,
+        isToggle: true
+    )
+
+    static let notifications = Setting(
+        iconName: "bell.badge.fill",
+        text: "Notifications",
+        color: .red,
+        detailText: nil,
+        isToggle: false
+    )
+
+    static let soundsHaptics = Setting(
+        iconName: "speaker.wave.3.fill",
+        text: "Sounds & Haptics",
+        color: .red,
+        detailText: nil,
+        isToggle: false
+    )
+
+    static let focus = Setting(
+        iconName: "moon.fill",
+        text: "Focus",
+        color: .indigo,
+        detailText: nil,
+        isToggle: false
+    )
+
+    static let screenTime = Setting(
+        iconName: "hourglass",
+        text: "Screen Time",
+        color: .indigo,
+        detailText: nil,
+        isToggle: false
+    )
+
+    static let allSettings: [Setting] = [
+        .airplaneMode,
+        .wifi,
+        .bluetooth,
+        .cellular,
+        .personalHotspot,
+        .vpn,
+        .notifications,
+        .soundsHaptics,
+        .focus,
+        .screenTime
+    ]
 }
 
 #Preview {

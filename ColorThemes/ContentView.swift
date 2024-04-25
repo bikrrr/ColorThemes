@@ -47,7 +47,11 @@ struct ProfileView: View {
                         Text("Pat Smith")
                             .font(.title2)
                         Text("Apple ID, iCloud, Media & Purchases")
-                            .font(.subheadline)
+                            .font(.custom(
+                                "SF Pro",
+                                size: 14,
+                                relativeTo: .subheadline))
+                            .fontWeight(.ultraLight)
                             .foregroundStyle(.primary)
                     }
                 }

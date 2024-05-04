@@ -8,9 +8,10 @@
 import SwiftUI
 
 public enum ThemeIdentifier: String, CaseIterable, Identifiable {
+    case iOSLight = "iOSLight"
+    case light = "Light"
     case indigo = "Indigo"
     case rose = "Rosé"
-    case light = "Light"
 
     public var id: Self { self }
 }
@@ -42,6 +43,9 @@ enum ColorName: String, CaseIterable, Identifiable {
          primaryIcon02Selected,
          primaryIcon03,
          primaryIcon03Active,
+         primaryIcon04,
+         primaryIcon05,
+         primaryIcon06,
          primaryInteractive01,
          primaryInteractive01Active,
          primaryInteractive01Disabled,

@@ -9,6 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var searchText = ""
+    @State private var selectedTheme: ThemeIdentifier = .iOSLight
+
+    private var theme: ColorTheme {
+        UniversalColorTheme(identifier: selectedTheme)
+    }
+
+    private var settings: [Setting] {
+        Setting.createSettings(theme: theme)
+    }
 
     var body: some View {
         NavigationStack {
@@ -16,18 +25,32 @@ struct ContentView: View {
                 ProfileView()
 
                 Section {
-                    ForEach(Setting.allSettings.prefix(6), id: \.self) { setting in
+                    ForEach(settings.prefix(6), id: \.self) { setting in
                         SettingCell(setting: setting)
                     }
                 }
 
                 Section {
-                    ForEach(Setting.allSettings.suffix(4), id: \.self) { setting in
+                    ForEach(settings.suffix(4), id: \.self) { setting in
                         SettingCell(setting: setting)
                     }
                 }
             }
             .navigationTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    HStack(spacing: 0) {
+                        Text("Theme:")
+                        Picker("Theme", selection: $selectedTheme) {
+                            ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
+                                Text(theme.rawValue).tag(theme)
+                            }
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                }
+
+            }
             .padding(.horizontal, -4)
         }
         .searchable(text: $searchText)
@@ -148,98 +171,80 @@ struct Setting: Identifiable, Equatable, Hashable {
 }
 
 extension Setting {
-    static let airplaneMode = Setting(
-        iconName: "airplane",
-        text: "Airplane Mode",
-        color: .orange,
-        detailText: nil,
-        isToggle: true
-    )
-
-    static let wifi = Setting(
-        iconName: "wifi",
-        text: "Wi-Fi",
-        color: .blue,
-        detailText: "FBISurveillanceVan",
-        isToggle: false
-    )
-
-    static let bluetooth = Setting(
-        iconName: "dot.radiowaves.right",
-        text: "Bluetooth",
-        color: .blue,
-        detailText: "On",
-        isToggle: false
-    )
-
-    static let cellular = Setting(
-        iconName: "antenna.radiowaves.left.and.right",
-        text: "Cellular",
-        color: .green,
-        detailText: nil,
-        isToggle: false
-    )
-
-    static let personalHotspot = Setting(
-        iconName: "personalhotspot",
-        text: "Personal Hotspot",
-        color: .green,
-        detailText: "Off",
-        isToggle: false
-    )
-
-    static let vpn = Setting(
-        iconName: "network",
-        text: "VPN",
-        color: .blue,
-        detailText: nil,
-        isToggle: true
-    )
-
-    static let notifications = Setting(
-        iconName: "bell.badge.fill",
-        text: "Notifications",
-        color: .red,
-        detailText: nil,
-        isToggle: false
-    )
-
-    static let soundsHaptics = Setting(
-        iconName: "speaker.wave.3.fill",
-        text: "Sounds & Haptics",
-        color: .red,
-        detailText: nil,
-        isToggle: false
-    )
-
-    static let focus = Setting(
-        iconName: "moon.fill",
-        text: "Focus",
-        color: .indigo,
-        detailText: nil,
-        isToggle: false
-    )
-
-    static let screenTime = Setting(
-        iconName: "hourglass",
-        text: "Screen Time",
-        color: .indigo,
-        detailText: nil,
-        isToggle: false
-    )
-
-    static let allSettings: [Setting] = [
-        .airplaneMode,
-        .wifi,
-        .bluetooth,
-        .cellular,
-        .personalHotspot,
-        .vpn,
-        .notifications,
-        .soundsHaptics,
-        .focus,
-        .screenTime
-    ]
+    static func createSettings(theme: ColorTheme) -> [Setting] {
+        return [
+            Setting(
+                iconName: "airplane",
+                text: "Airplane Mode",
+                color: theme.color(for: .primaryIcon01),
+                detailText: nil,
+                isToggle: true
+            ),
+            Setting(
+                iconName: "wifi",
+                text: "Wi-Fi",
+                color: theme.color(for: .primaryIcon02),
+                detailText: "FBISurveillanceVan",
+                isToggle: false
+            ),
+            Setting(
+                iconName: "dot.radiowaves.right",
+                text: "Bluetooth",
+                color: theme.color(for: .primaryIcon03),
+                detailText: "On",
+                isToggle: false
+            ),
+            Setting(
+                iconName: "antenna.radiowaves.left.and.right",
+                text: "Cellular",
+                color: theme.color(for: .primaryIcon04),
+                detailText: nil,
+                isToggle: false
+            ),
+            Setting(
+                iconName: "personalhotspot",
+                text: "Personal Hotspot",
+                color: theme.color(for: .primaryIcon04),
+                detailText: "Off",
+                isToggle: false
+            ),
+            Setting(
+                iconName: "network",
+                text: "VPN",
+                color: theme.color(for: .primaryIcon02),
+                detailText: nil,
+                isToggle: true
+            ),
+            Setting(
+                iconName: "bell.badge.fill",
+                text: "Notifications",
+                color: theme.color(for: .primaryIcon05),
+                detailText: nil,
+                isToggle: false
+            ),
+            Setting(
+                iconName: "speaker.wave.3.fill",
+                text: "Sounds & Haptics",
+                color: theme.color(for: .primaryIcon05),
+                detailText: nil,
+                isToggle: false
+            ),
+            Setting(
+                iconName: "moon.fill",
+                text: "Focus",
+                color: theme.color(for: .primaryIcon06),
+                detailText: nil,
+                isToggle: false
+            ),
+            Setting(
+                iconName: "hourglass",
+                text: "Screen Time",
+                color: theme.color(for: .primaryIcon06),
+                detailText: nil,
+                isToggle: false
+            )
+        ]
+    }
 }
 
 #Preview {

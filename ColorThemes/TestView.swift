@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+@Observable
+class ThemeManager {
+    var selectedTheme: ThemeIdentifier = .iOSLight
+
+    var theme: ColorTheme {
+        UniversalColorTheme(identifier: selectedTheme)
+    }
+}
+
+extension ThemeManager {
+    var settings: [Setting] {
+        Setting.createSettings(theme: theme)
+    }
+}
+
 public enum ThemeIdentifier: String, CaseIterable, Identifiable {
     case iOSLight = "iOSLight"
     case light = "Light"
@@ -30,7 +45,14 @@ struct UniversalColorTheme: ColorTheme {
 }
 
 enum ColorName: String, CaseIterable, Identifiable {
-    case primaryField01,
+    case iOSBlue,
+         iOSBlueDark,
+         iOSGray,
+         iOSGreen,
+         iOSIndigo,
+         iOSOrange,
+         iOSRed,
+         primaryField01,
          primaryField01Active,
          primaryField02,
          primaryField02Active,
@@ -83,18 +105,19 @@ enum ColorName: String, CaseIterable, Identifiable {
 }
 
 struct TestView: View {
-    @State private var selectedTheme: ThemeIdentifier = .indigo
-
-    private var theme: ColorTheme {
-        UniversalColorTheme(identifier: selectedTheme)
-    }
+    @Environment(ThemeManager.self) private var themeManager: ThemeManager
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 
     var body: some View {
         ScrollView {
             Section("Theme") {
-                Picker("Theme", selection: $selectedTheme) {
+                Picker("Theme", selection: Binding(
+                    get: { themeManager.selectedTheme },
+                    set: { newValue in
+                        themeManager.selectedTheme = newValue
+                    }
+                )) {
                     ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
                         Text(theme.rawValue).tag(theme)
                     }
@@ -106,7 +129,7 @@ struct TestView: View {
                 LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(ColorName.allCases, id: \.self) { colorName in
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(theme.color(for: colorName))
+                            .fill(themeManager.theme.color(for: colorName))
                             .aspectRatio(1, contentMode: .fit)
                     }
                 }
@@ -118,4 +141,5 @@ struct TestView: View {
 
 #Preview {
     TestView()
+        .environment(ThemeManager())
 }

@@ -8,15 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(ThemeManager.self) var themeManager
     @State private var searchText = ""
-    @State private var selectedTheme: ThemeIdentifier = .iOSLight
-
-    private var theme: ColorTheme {
-        UniversalColorTheme(identifier: selectedTheme)
-    }
 
     private var settings: [Setting] {
-        Setting.createSettings(theme: theme)
+        Setting.createSettings(theme: themeManager.theme)
     }
 
     var body: some View {
@@ -41,7 +37,12 @@ struct ContentView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 0) {
                         Text("Theme:")
-                        Picker("Theme", selection: $selectedTheme) {
+                        Picker("Theme", selection: Binding(
+                            get: { themeManager.selectedTheme },
+                            set: { newValue in
+                                themeManager.selectedTheme = newValue
+                            }
+                        )) {
                             ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
                                 Text(theme.rawValue).tag(theme)
                             }
@@ -49,7 +50,6 @@ struct ContentView: View {
                     }
                     .buttonStyle(.bordered)
                 }
-
             }
             .padding(.horizontal, -4)
         }
@@ -58,13 +58,15 @@ struct ContentView: View {
 }
 
 struct ProfileView: View {
+    @Environment(ThemeManager.self) var themeManager
+
     var body: some View {
         Section(header: Spacer().frame(height: 0)) {
             NavigationLink(destination: Text("Destination for Pat Smith")) {
                 HStack {
                     Image(systemName: "person.crop.circle.fill")
                         .resizable()
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(themeManager.theme.color(for: .iOSGray))
                         .frame(width: 60, height: 60)
                     VStack(alignment: .leading) {
                         Text("Pat Smith")
@@ -86,12 +88,12 @@ struct ProfileView: View {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .scaledToFit()
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(themeManager.theme.color(for: .iOSGray))
                             .frame(width: 35, height: 30)
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .scaledToFit()
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(themeManager.theme.color(for: .iOSGray))
                             .frame(width: 35, height: 30)
                     }
                     VStack(alignment: .leading) {
@@ -176,70 +178,70 @@ extension Setting {
             Setting(
                 iconName: "airplane",
                 text: "Airplane Mode",
-                color: theme.color(for: .primaryIcon01),
+                color: theme.color(for: .iOSOrange),
                 detailText: nil,
                 isToggle: true
             ),
             Setting(
                 iconName: "wifi",
                 text: "Wi-Fi",
-                color: theme.color(for: .primaryIcon02),
+                color: theme.color(for: .iOSBlueDark),
                 detailText: "FBISurveillanceVan",
                 isToggle: false
             ),
             Setting(
                 iconName: "dot.radiowaves.right",
                 text: "Bluetooth",
-                color: theme.color(for: .primaryIcon03),
+                color: theme.color(for: .iOSBlue),
                 detailText: "On",
                 isToggle: false
             ),
             Setting(
                 iconName: "antenna.radiowaves.left.and.right",
                 text: "Cellular",
-                color: theme.color(for: .primaryIcon04),
+                color: theme.color(for: .iOSGreen),
                 detailText: nil,
                 isToggle: false
             ),
             Setting(
                 iconName: "personalhotspot",
                 text: "Personal Hotspot",
-                color: theme.color(for: .primaryIcon04),
+                color: theme.color(for: .iOSGreen),
                 detailText: "Off",
                 isToggle: false
             ),
             Setting(
                 iconName: "network",
                 text: "VPN",
-                color: theme.color(for: .primaryIcon02),
+                color: theme.color(for: .iOSBlueDark),
                 detailText: nil,
                 isToggle: true
             ),
             Setting(
                 iconName: "bell.badge.fill",
                 text: "Notifications",
-                color: theme.color(for: .primaryIcon05),
+                color: theme.color(for: .iOSRed),
                 detailText: nil,
                 isToggle: false
             ),
             Setting(
                 iconName: "speaker.wave.3.fill",
                 text: "Sounds & Haptics",
-                color: theme.color(for: .primaryIcon05),
+                color: theme.color(for: .iOSRed),
                 detailText: nil,
                 isToggle: false
             ),
             Setting(
                 iconName: "moon.fill",
                 text: "Focus",
-                color: theme.color(for: .primaryIcon06),
+                color: theme.color(for: .iOSIndigo),
                 detailText: nil,
                 isToggle: false
             ),
             Setting(
                 iconName: "hourglass",
                 text: "Screen Time",
-                color: theme.color(for: .primaryIcon06),
+                color: theme.color(for: .iOSIndigo),
                 detailText: nil,
                 isToggle: false
             )
@@ -249,4 +251,5 @@ extension Setting {
 
 #Preview {
     ContentView()
+        .environment(ThemeManager())
 }

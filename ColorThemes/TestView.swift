@@ -7,21 +7,6 @@
 
 import SwiftUI
 
-@Observable
-class ThemeManager {
-    var selectedTheme: ThemeIdentifier = .iOSLight
-
-    var theme: ColorTheme {
-        UniversalColorTheme(identifier: selectedTheme)
-    }
-}
-
-extension ThemeManager {
-    var settings: [Setting] {
-        Setting.createSettings(theme: theme)
-    }
-}
-
 public enum ThemeIdentifier: String, CaseIterable, Identifiable {
     case iOSLight = "iOSLight"
     case light = "Light"
@@ -104,6 +89,21 @@ enum ColorName: String, CaseIterable, Identifiable {
     public var id: Self { self }
 }
 
+@Observable
+class ThemeManager {
+    var selectedTheme: ThemeIdentifier = .iOSLight
+
+    var theme: ColorTheme {
+        UniversalColorTheme(identifier: selectedTheme)
+    }
+}
+
+extension ThemeManager {
+    var settings: [Setting] {
+        Setting.createSettings(theme: theme)
+    }
+}
+
 struct TestView: View {
     @Environment(ThemeManager.self) private var themeManager: ThemeManager
 
@@ -111,21 +111,18 @@ struct TestView: View {
 
     var body: some View {
         ScrollView {
-            Section("Theme") {
-                Picker("Theme", selection: Binding(
+            Section(header: Text("Theme")) {
+                Picker("Select a Theme", selection: Binding(
                     get: { themeManager.selectedTheme },
-                    set: { newValue in
-                        themeManager.selectedTheme = newValue
-                    }
+                    set: { newValue in themeManager.selectedTheme = newValue }
                 )) {
                     ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
                         Text(theme.rawValue).tag(theme)
                     }
-                }
-                .pickerStyle(SegmentedPickerStyle())
+                }.pickerStyle(SegmentedPickerStyle())
             }
 
-            Section("Swatches") {
+            Section(header: Text("Color Swatches")) {
                 LazyVGrid(columns: columns, spacing: 8) {
                     ForEach(ColorName.allCases, id: \.self) { colorName in
                         RoundedRectangle(cornerRadius: 16)
@@ -134,8 +131,7 @@ struct TestView: View {
                     }
                 }
             }
-        }
-        .padding()
+        }.padding()
     }
 }
 

@@ -1,11 +1,20 @@
 //
-//  TestView.swift
+//  ThemeManager.swift
 //  ColorThemes
 //
-//  Created by Uhl Albert on 4/25/24.
+//  Created by Uhl Albert on 5/5/24.
 //
 
 import SwiftUI
+
+@Observable
+class ThemeManager {
+    var selectedTheme: ThemeIdentifier = .iOSLight
+
+    var theme: ColorTheme {
+        UniversalColorTheme(identifier: selectedTheme)
+    }
+}
 
 public enum ThemeIdentifier: String, CaseIterable, Identifiable {
     case iOSLight = "iOSLight"
@@ -89,53 +98,8 @@ enum ColorName: String, CaseIterable, Identifiable {
     public var id: Self { self }
 }
 
-@Observable
-class ThemeManager {
-    var selectedTheme: ThemeIdentifier = .iOSLight
-
-    var theme: ColorTheme {
-        UniversalColorTheme(identifier: selectedTheme)
-    }
-}
-
 extension ThemeManager {
     var settings: [Setting] {
         Setting.createSettings(theme: theme)
     }
-}
-
-struct TestView: View {
-    @Environment(ThemeManager.self) private var themeManager: ThemeManager
-
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
-
-    var body: some View {
-        ScrollView {
-            Section(header: Text("Theme")) {
-                Picker("Select a Theme", selection: Binding(
-                    get: { themeManager.selectedTheme },
-                    set: { newValue in themeManager.selectedTheme = newValue }
-                )) {
-                    ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
-                        Text(theme.rawValue).tag(theme)
-                    }
-                }.pickerStyle(SegmentedPickerStyle())
-            }
-
-            Section(header: Text("Color Swatches")) {
-                LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(ColorName.allCases, id: \.self) { colorName in
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(themeManager.theme.color(for: colorName))
-                            .aspectRatio(1, contentMode: .fit)
-                    }
-                }
-            }
-        }.padding()
-    }
-}
-
-#Preview {
-    TestView()
-        .environment(ThemeManager())
 }

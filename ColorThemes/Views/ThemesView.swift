@@ -8,9 +8,8 @@
 import SwiftUI
 
 struct ThemesView: View {
-    @Environment(\.dismiss) var dismiss
-//
     @Environment(ThemeManager.self) private var themeManager: ThemeManager
+    @Environment(\.dismiss) var dismiss
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 

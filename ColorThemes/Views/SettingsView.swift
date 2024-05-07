@@ -28,13 +28,19 @@ struct SettingsView: View {
                         SettingCell(setting: setting)
                     }
                 }
+                .listRowBackground(themeManager.theme.color(for: .primaryInteractive02))
 
                 Section {
                     ForEach(settings.suffix(4), id: \.self) { setting in
                         SettingCell(setting: setting)
                     }
                 }
+                .listRowBackground(themeManager.theme.color(for: .primaryInteractive02))
+
             }
+            .scrollContentBackground(.hidden)
+            .background(themeManager.theme.color(for: .primaryUi04))
+//            .toolbarBackground(themeManager.theme.color(for: .primaryInteractive01Hover), for: .navigationBar)
             .navigationTitle("Settings")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -50,8 +56,7 @@ struct SettingsView: View {
                 }
             }
             .padding(.horizontal, -4)
-        }
-        .searchable(text: $searchText)
+        }        .searchable(text: $searchText)
     }
 }
 
@@ -69,13 +74,14 @@ struct ProfileView: View {
                     VStack(alignment: .leading) {
                         Text("Pat Smith")
                             .font(.title2)
+                            .foregroundStyle(themeManager.theme.color(for: .primaryText01))
                         Text("Apple ID, iCloud, Media & Purchases")
                             .font(.custom(
                                 "SF Pro",
                                 size: 14,
                                 relativeTo: .subheadline))
                             .fontWeight(.ultraLight)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(themeManager.theme.color(for: .primaryText01))
                     }
                 }
             }
@@ -96,15 +102,18 @@ struct ProfileView: View {
                     }
                     VStack(alignment: .leading) {
                         Text("Family")
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(themeManager.theme.color(for: .primaryText01))
                     }
                 }
             }
         }
+        .listRowBackground(themeManager.theme.color(for: .primaryInteractive02))
     }
 }
 
 struct SettingCell: View {
+    @Environment(ThemeManager.self) private var themeManager: ThemeManager
+
     let setting: Setting
     @State private var isOn: Bool = false
 
@@ -138,6 +147,7 @@ struct SettingCell: View {
             )
 
         Text(setting.text)
+            .foregroundStyle(themeManager.theme.color(for: .primaryText01))
 
         Spacer()
 
@@ -145,7 +155,9 @@ struct SettingCell: View {
             Text(detailText)
                 .foregroundStyle(.primary)
                 .fontWeight(.light)
+                .foregroundStyle(themeManager.theme.color(for: .primaryText01))
         }
+
     }
 }
 

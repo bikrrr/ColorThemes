@@ -1,5 +1,5 @@
 //
-//  TestView.swift
+//  ThemesView.swift
 //  ColorThemes
 //
 //  Created by Uhl Albert on 4/25/24.
@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-struct TestView: View {
+struct ThemesView: View {
     @Environment(\.dismiss) var dismiss
-    @Bindable var themeManager: ThemeManager
+//
+    @Environment(ThemeManager.self) private var themeManager: ThemeManager
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
 
     var body: some View {
+        @Bindable var themeManager = themeManager
+
         NavigationStack {
             Form {
                 Section("Theme") {
@@ -48,5 +51,6 @@ struct TestView: View {
 }
 
 #Preview {
-    TestView(themeManager: ThemeManager())
+    ThemesView()
+        .environment(ThemeManager())
 }

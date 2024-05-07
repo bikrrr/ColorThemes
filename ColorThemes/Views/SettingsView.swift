@@ -17,8 +17,6 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        @Bindable var themeManager = themeManager
-
         NavigationStack {
             List {
                 ProfileView()
@@ -40,7 +38,7 @@ struct SettingsView: View {
             }
             .scrollContentBackground(.hidden)
             .background(themeManager.theme.color(for: .primaryUi04))
-//            .toolbarBackground(themeManager.theme.color(for: .primaryInteractive01Hover), for: .navigationBar)
+            .toolbarBackground(themeManager.theme.color(for: .primaryInteractive01Hover), for: .navigationBar)
             .navigationTitle("Settings")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -52,7 +50,6 @@ struct SettingsView: View {
                             ThemesView()
                         }
                     }
-                    .buttonStyle(.bordered)
                 }
             }
             .padding(.horizontal, -4)
@@ -124,6 +121,7 @@ struct SettingCell: View {
                     settingIcon
                 }
             }
+            .tint(themeManager.theme.color(for: .primaryInteractive01))
         } else {
             NavigationLink(destination: Text("Destination for \(setting.text)")) {
                 HStack(spacing: 15) {

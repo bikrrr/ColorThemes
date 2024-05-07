@@ -43,7 +43,6 @@ struct ThemesView: View {
                 Button("Done") {
                     dismiss()
                 }
-                .buttonStyle(.bordered)
             }
         }
     }

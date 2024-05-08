@@ -41,19 +41,17 @@ struct SettingsView: View {
             .toolbarBackground(themeManager.theme.color(for: .primaryInteractive01Hover), for: .navigationBar)
             .navigationTitle("Settings")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 0) {
-                        Button("\(themeManager.selectedTheme.rawValue)") {
-                            showingSheet.toggle()
-                        }
-                        .sheet(isPresented: $showingSheet) {
-                            ThemesView()
-                        }
+                HStack(spacing: 0) {
+                    Button("\(themeManager.selectedTheme.rawValue)") {
+                        showingSheet.toggle()
+                    }
+                    .sheet(isPresented: $showingSheet) {
+                        ThemesView()
                     }
                 }
             }
             .padding(.horizontal, -4)
-        }        .searchable(text: $searchText)
+        }.searchable(text: $searchText)
     }
 }
 

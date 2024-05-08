@@ -40,8 +40,10 @@ struct ThemesView: View {
             .navigationTitle("Themes")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Button("Done") {
-                    dismiss()
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") {
+                        dismiss()
+                    }
                 }
             }
         }

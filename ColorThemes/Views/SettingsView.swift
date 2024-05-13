@@ -34,7 +34,6 @@ struct SettingsView: View {
                     }
                 }
                 .listRowBackground(themeManager.theme.color(for: .primaryInteractive02))
-
             }
             .scrollContentBackground(.hidden)
             .background(themeManager.theme.color(for: .primaryUi04))
@@ -75,7 +74,8 @@ struct ProfileView: View {
                             .font(.custom(
                                 "SF Pro",
                                 size: 14,
-                                relativeTo: .subheadline))
+                                relativeTo: .subheadline
+                            ))
                             .fontWeight(.ultraLight)
                             .foregroundStyle(themeManager.theme.color(for: .primaryText01))
                     }
@@ -154,7 +154,6 @@ struct SettingCell: View {
                 .fontWeight(.light)
                 .foregroundStyle(themeManager.theme.color(for: .primaryText01))
         }
-
     }
 }
 
@@ -162,4 +161,3 @@ struct SettingCell: View {
     SettingsView()
         .environment(ThemeManager())
 }
-

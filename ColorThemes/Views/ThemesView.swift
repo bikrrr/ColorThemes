@@ -10,9 +10,9 @@ import SwiftUI
 struct ThemesView: View {
     @Environment(ThemeManager.self) private var themeManager: ThemeManager
     @Environment(\.dismiss) var dismiss
-    
+
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
-    
+
     var body: some View {
         NavigationStack {
             List {

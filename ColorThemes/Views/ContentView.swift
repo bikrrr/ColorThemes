@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(ThemeManager.self) private var themeManager: ThemeManager
-
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -17,18 +17,19 @@ struct ContentView: View {
                     NavigationLink(destination: SettingsView()) {
                         Text("Settings")
                     }
-
+                    
                     NavigationLink(destination: MediaView(themeManager: themeManager)) {
                         Text("Media")
                     }
                 }
-
-                ThemePicker()
-
-                ThemeColors()
+                
+                Section("Theme") {
+                    ThemePicker()
+                    
+                    ThemeColors()
+                }
+                .navigationTitle("Color Themes")
             }
-            .navigationTitle("Color Themes")
-            
         }
     }
 }

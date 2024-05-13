@@ -13,14 +13,12 @@ struct ThemePicker: View {
     var body: some View {
         @Bindable var themeManager = themeManager
 
-        Section("Theme") {
             Picker("Select a Theme", selection: $themeManager.selectedTheme) {
                 ForEach(ThemeIdentifier.allCases, id: \.self) { theme in
                     Text(theme.rawValue).tag(theme)
                 }
             }
             .pickerStyle(SegmentedPickerStyle())
-        }
     }
 }
 

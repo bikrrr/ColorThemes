@@ -15,14 +15,12 @@ struct ThemeColors: View {
     var body: some View {
         @Bindable var themeManager = themeManager
 
-        Section("Colors") {
             LazyVGrid(columns: columns, spacing: 8) {
                 ForEach(ColorName.allCases, id: \.self) { colorName in
                     RoundedRectangle(cornerRadius: 16)
                         .fill(themeManager.theme.color(for: colorName))
                         .aspectRatio(1, contentMode: .fit)
                 }
-            }
         }
     }
 }

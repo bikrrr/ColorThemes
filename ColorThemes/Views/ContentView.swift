@@ -12,18 +12,23 @@ struct ContentView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                Section("Preview") {
+            Form {
+                Section("Sample Screens") {
                     NavigationLink(destination: SettingsView()) {
-                        Text("Settings Screen")
+                        Text("Settings")
                     }
 
                     NavigationLink(destination: MediaView(themeManager: themeManager)) {
-                        Text("Media App")
+                        Text("Media")
                     }
                 }
+
+                ThemePicker()
+
+                ThemeColors()
             }
             .navigationTitle("Color Themes")
+            
         }
     }
 }

@@ -47,6 +47,7 @@ struct SettingsView: View {
                     }
                     .sheet(isPresented: $showingSheet) {
                         ThemesView()
+                            .presentationDetents([.medium, .large])
                     }
                 }
             }

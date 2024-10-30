@@ -35,7 +35,6 @@ struct SettingsView: View {
                 }
                 .listRowBackground(themeManager.theme.color(for: .primaryInteractive02))
             }
-            .scrollContentBackground(.hidden)
             .background(themeManager.theme.color(for: .primaryUi04))
             .toolbarBackground(themeManager.theme.color(for: .primaryInteractive01Hover), for: .navigationBar)
             .navigationTitle("Settings")

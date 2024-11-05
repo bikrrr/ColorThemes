@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D83DF6652BF2D34A0063F53E /* ThemeColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83DF6642BF2D34A0063F53E /* ThemeColors.swift */; };
 		D83DF6672BF2D5830063F53E /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83DF6662BF2D5830063F53E /* ThemePicker.swift */; };
+		D855DDF92CDA8D7A00F4767E /* BluetoothSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D855DDF82CDA8D7A00F4767E /* BluetoothSettingView.swift */; };
 		D85BC40F2BD866A0004D6425 /* ColorThemesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85BC40E2BD866A0004D6425 /* ColorThemesApp.swift */; };
 		D85BC4112BD866A0004D6425 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85BC4102BD866A0004D6425 /* ContentView.swift */; };
 		D85BC4132BD866A1004D6425 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D85BC4122BD866A1004D6425 /* Assets.xcassets */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		D83DF6642BF2D34A0063F53E /* ThemeColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
 		D83DF6662BF2D5830063F53E /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
+		D855DDF82CDA8D7A00F4767E /* BluetoothSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSettingView.swift; sourceTree = "<group>"; };
 		D85BC40B2BD866A0004D6425 /* ColorThemes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorThemes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D85BC40E2BD866A0004D6425 /* ColorThemesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorThemesApp.swift; sourceTree = "<group>"; };
 		D85BC4102BD866A0004D6425 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			children = (
 				D85BC4102BD866A0004D6425 /* ContentView.swift */,
 				D878981E2BEAC288009D2C36 /* SettingsView.swift */,
+				D855DDF82CDA8D7A00F4767E /* BluetoothSettingView.swift */,
 				D87898202BEAC337009D2C36 /* MediaView.swift */,
 				D87496A72BDB2AB1009C2AB5 /* ThemesView.swift */,
 				D83DF6662BF2D5830063F53E /* ThemePicker.swift */,
@@ -182,6 +185,7 @@
 				D878981F2BEAC288009D2C36 /* SettingsView.swift in Sources */,
 				D85BC40F2BD866A0004D6425 /* ColorThemesApp.swift in Sources */,
 				D8CA6CF02BE852870018C6D1 /* ThemeManager.swift in Sources */,
+				D855DDF92CDA8D7A00F4767E /* BluetoothSettingView.swift in Sources */,
 				D83DF6652BF2D34A0063F53E /* ThemeColors.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

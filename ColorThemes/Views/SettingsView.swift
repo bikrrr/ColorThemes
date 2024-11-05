@@ -11,6 +11,7 @@ struct SettingsView: View {
     @Environment(ThemeManager.self) private var themeManager: ThemeManager
     @State private var searchText = ""
     @State private var showingSheet = false
+    @State private var isEnabled = true
 
     private var settings: [Setting] {
         Setting.createSettings(theme: themeManager.theme)
@@ -50,7 +51,8 @@ struct SettingsView: View {
                 }
             }
             .padding(.horizontal, -4)
-        }.searchable(text: $searchText)
+        }
+        .searchable(text: $searchText)
     }
 }
 
@@ -120,12 +122,31 @@ struct SettingCell: View {
                 }
             }
             .tint(themeManager.theme.color(for: .primaryInteractive01))
-        } else {
-            NavigationLink(destination: Text("Destination for \(setting.text)")) {
+        } else if let destinationID = setting.destinationID {
+            NavigationLink(destination: destinationView(for: destinationID)) {
                 HStack(spacing: 15) {
                     settingIcon
                 }
             }
+        } else {
+            HStack(spacing: 15) {
+                settingIcon
+            }
+        }
+    }
+
+    private func destinationView(for id: DestinationID) -> some View {
+        switch id {
+        case .bluetooth:
+            return AnyView(BluetoothSettingView())
+        case .wifi:
+            return AnyView(Text("Wi-Fi Settings"))
+        case .cellular:
+            return AnyView(Text("Cellular Settings"))
+        case .notifications:
+            return AnyView(Text("Notifications Settings"))
+        case .custom(let customID):
+            return AnyView(Text("Custom Destination: \(customID)"))
         }
     }
 
